@@ -1,8 +1,7 @@
 'use strict';
 
 function Denote() {
-  this.onFulfilledCallbacks = [];
-  this.onRejectedCallbacks = [];
+  this.thenCalls = [];
 }
 
 function isFunction(value) {
@@ -10,24 +9,40 @@ function isFunction(value) {
 }
 
 Denote.prototype.then = function(onFulfilled, onRejected) {
-  if(isFunction(onFulfilled)) {
-    this.onFulfilledCallbacks.push(onFulfilled);
-  }
-  if(isFunction(onRejected)) {
-    this.onRejectedCallbacks.push(onRejected);
-  }
-  return new Denote();
+  var thenCall = {
+    onFulfilled: onFulfilled,
+    onRejected: onRejected,
+    returnPromise: new Denote()
+  };
+  this.thenCalls.push(thenCall)
+  return thenCall.returnPromise;
 };
 
 Denote.prototype.resolve = function(value) {
-  this.onFulfilledCallbacks.forEach(function(callback) {
-    callback(value);
+  this.thenCalls.forEach(function(thenCall) {
+    if(isFunction(thenCall.onFulfilled)) {
+      try {
+        thenCall.onFulfilled(value);
+      } catch(e) {
+        thenCall.returnPromise.reject(e);
+      }
+    } else {
+      thenCall.returnPromise.resolve(value);
+    }
   });
 };
 
 Denote.prototype.reject = function(reason) {
-  this.onRejectedCallbacks.forEach(function(callback) {
-    callback(reason);
+  this.thenCalls.forEach(function(thenCall) {
+    if(isFunction(thenCall.onRejected)) {
+      try {
+        thenCall.onRejected(reason);
+      } catch(e) {
+        thenCall.returnPromise.reject(e);
+      }
+    } else {
+      thenCall.returnPromise.reject(reason);
+    }
   });
 };
 

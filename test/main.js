@@ -62,6 +62,22 @@ describe('The promise object', function() {
       promise.resolve();
       expect(result).to.be('second');
     });
+
+    it('resolves the returned promise on resolve if onFulfilled is not a function', function() {
+      var promise2 = promise.then('not a function');
+      promise2.then(onFulfilled);
+      promise.resolve('my value');
+      expect(onFulfilled.calledWith('my value')).to.be(true);
+    });
+
+    it('rejects the returned promise if onFulfilled throws an error', function() {
+      var onRejected = sinon.spy();
+      var error = new Error();
+      var promise2 = promise.then(function() { throw error; });
+      promise2.then(undefined, onRejected);
+      promise.resolve();
+      expect(onRejected.calledWith(error)).to.be(true);
+    });
   });
 
   describe('when the promise is rejected', function() {
@@ -104,6 +120,21 @@ describe('The promise object', function() {
       });
       promise.reject();
       expect(result).to.be('second');
+    });
+
+    it('rejects the returned promise on reject if onRejected is not a function', function() {
+      var promise2 = promise.then(undefined, 'not a function');
+      promise2.then(undefined, onRejected);
+      promise.reject('reason');
+      expect(onRejected.calledWith('reason')).to.be(true);
+    });
+
+    it('rejects the returned promise if onRejected throws an error', function() {
+      var error = new Error();
+      var promise2 = promise.then(undefined, function() { throw error; });
+      promise2.then(undefined, onRejected);
+      promise.reject();
+      expect(onRejected.calledWith(error)).to.be(true);
     });
   });
 });
