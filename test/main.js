@@ -15,34 +15,60 @@ describe('The promise object', function() {
   });
 
   describe('when the promise is resolved', function() {
+    var onFulfilled;
+
+    beforeEach(function() {
+      onFulfilled = sinon.spy();
+    });
+
     it('calls the onFulfilled callback', function() {
-      var onFulfilled = sinon.spy();
       promise.then(onFulfilled);
       promise.resolve();
       expect(onFulfilled.called).to.be(true);
     });
 
     it('calls onFulfilled with with the promise value', function() {
-      var onFulfilled = sinon.spy();
       promise.then(onFulfilled);
       promise.resolve('my value');
       expect(onFulfilled.calledWith('my value')).to.be(true);
     });
+
+    it('calls multiple onFulfilled callbacks', function() {
+      var anotherOnFulfilled = sinon.spy();
+      promise.then(onFulfilled);
+      promise.then(anotherOnFulfilled);
+      promise.resolve();
+      expect(onFulfilled.called).to.be(true);
+      expect(anotherOnFulfilled.called).to.be(true);
+    });
   });
 
   describe('when the promise is rejected', function() {
+    var onRejected;
+
+    beforeEach(function() {
+      onRejected = sinon.spy();
+    });
+
     it('calls the onRejected callback', function() {
-      var onRejected = sinon.spy();
       promise.then(undefined, onRejected);
       promise.reject();
       expect(onRejected.called).to.be(true);
     });
 
     it('calls the onRejected callback with a reason', function() {
-      var onRejected = sinon.spy();
       promise.then(undefined, onRejected);
       promise.reject('my reason');
       expect(onRejected.calledWith('my reason')).to.be(true);
+    });
+
+    it('calls multiple onRejected callbacks', function() {
+      var anotherOnRejected = sinon.spy();
+      promise.then(undefined, onRejected);
+      promise.then(undefined, anotherOnRejected);
+      promise.reject();
+      expect(onRejected.called).to.be(true);
+      expect(anotherOnRejected.called).to.be(true);
     });
   });
 });
