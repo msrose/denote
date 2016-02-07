@@ -9,12 +9,12 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
   this.onRejected = onRejected;
 };
 
-Denote.prototype.resolve = function() {
-  this.onFulfilled();
+Denote.prototype.resolve = function(value) {
+  this.onFulfilled(value);
 };
 
-Denote.prototype.reject = function() {
-  this.onRejected();
+Denote.prototype.reject = function(reason) {
+  this.onRejected(reason);
 };
 
 module.exports = Denote;

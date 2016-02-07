@@ -1,5 +1,5 @@
-var assert = require('assert');
 var sinon = require('sinon');
+var expect = require('expect.js');
 
 var denote = require('..');
 
@@ -11,7 +11,7 @@ describe('The promise object', function() {
   });
 
   it('defines a then method', function() {
-    assert.equal(typeof promise.then, 'function');
+    expect(promise.then).to.be.a('function');
   });
 
   describe('when the promise is resolved', function() {
@@ -19,7 +19,14 @@ describe('The promise object', function() {
       var onFulfilled = sinon.spy();
       promise.then(onFulfilled);
       promise.resolve();
-      assert(onFulfilled.called);
+      expect(onFulfilled.called).to.be(true);
+    });
+
+    it('calls onFulfilled with with the promise value', function() {
+      var onFulfilled = sinon.spy();
+      promise.then(onFulfilled);
+      promise.resolve('my value');
+      expect(onFulfilled.calledWith('my value')).to.be(true);
     });
   });
 
@@ -28,7 +35,14 @@ describe('The promise object', function() {
       var onRejected = sinon.spy();
       promise.then(undefined, onRejected);
       promise.reject();
-      assert(onRejected.called);
+      expect(onRejected.called).to.be(true);
+    });
+
+    it('calls the onRejected callback with a reason', function() {
+      var onRejected = sinon.spy();
+      promise.then(undefined, onRejected);
+      promise.reject('my reason');
+      expect(onRejected.calledWith('my reason')).to.be(true);
     });
   });
 });
