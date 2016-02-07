@@ -24,7 +24,6 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
 };
 
 Denote.prototype.resolve = function(value) {
-  var self = this;
   if (this.state !== PENDING) {
     return;
   }
@@ -32,15 +31,13 @@ Denote.prototype.resolve = function(value) {
     throw new TypeError();
   }
   if (value instanceof Denote) {
-    value.then(readyToFulfill, function(reason) {
-      self.reject(reason);
-    });
+    value.then(fulfill.bind(this), this.reject.bind(this));
   } else {
-    readyToFulfill(value);
+    fulfill.call(this, value);
   }
-  function readyToFulfill(fulfillValue) {
-    self.state = FULFILLED;
-    self.thenCalls.forEach(function(thenCall) {
+  function fulfill(fulfillValue) {
+    this.state = FULFILLED;
+    this.thenCalls.forEach(function(thenCall) {
       if (isFunction(thenCall.onFulfilled)) {
         setTimeout(function() {
           try {
