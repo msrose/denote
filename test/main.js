@@ -1,4 +1,6 @@
 var assert = require('assert');
+var sinon = require('sinon');
+
 var denote = require('..');
 
 describe('The promise object', function() {
@@ -13,23 +15,20 @@ describe('The promise object', function() {
   });
 
   describe('when the promise is resolved', function() {
-    it('calls the onFulfilled callback', function(done) {
-      promise.then(function(value) {
-        assert.equal(value, 'my value');
-        done();
-      });
-      promise.resolve('my value');
+    it('calls the onFulfilled callback', function() {
+      var onFulfilled = sinon.spy();
+      promise.then(onFulfilled);
+      promise.resolve();
+      assert(onFulfilled.called);
     });
   });
 
   describe('when the promise is rejected', function() {
-    it('calls the onRejected callback', function(done) {
-      promise.then(function() {
-      }, function(reason) {
-        assert.equal(reason, 'my reason');
-        done();
-      });
-      promise.reject('my reason');
+    it('calls the onRejected callback', function() {
+      var onRejected = sinon.spy();
+      promise.then(undefined, onRejected);
+      promise.reject();
+      assert(onRejected.called);
     });
   });
 });
