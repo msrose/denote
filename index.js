@@ -1,7 +1,7 @@
 'use strict';
 
+var Denote = require('./denote');
+
 module.exports = function() {
-  return {
-    then: function() {}
-  };
+  return new Denote();
 };
