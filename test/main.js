@@ -41,6 +41,18 @@ describe('The promise object', function() {
       expect(onFulfilled.called).to.be(true);
       expect(anotherOnFulfilled.called).to.be(true);
     });
+
+    it('calls the onFulfilled callbacks in order', function() {
+      var result;
+      promise.then(function() {
+        result = 'first';
+      });
+      promise.then(function() {
+        result = 'second';
+      });
+      promise.resolve();
+      expect(result).to.be('second');
+    });
   });
 
   describe('when the promise is rejected', function() {
@@ -69,6 +81,18 @@ describe('The promise object', function() {
       promise.reject();
       expect(onRejected.called).to.be(true);
       expect(anotherOnRejected.called).to.be(true);
+    });
+
+    it('calls the onRejected callbacks in order', function() {
+      var result;
+      promise.then(undefined, function() {
+        result = 'first';
+      });
+      promise.then(undefined, function() {
+        result = 'second';
+      });
+      promise.reject();
+      expect(result).to.be('second');
     });
   });
 });
