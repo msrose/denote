@@ -19,6 +19,10 @@ describe('Denote', function() {
     expect(promise.then).to.be.a('function');
   });
 
+  it('starts out in pending state', function() {
+    expect(promise.state).to.be('pending');
+  });
+
   describe('the then method', function() {
     it('returns a promise', function() {
       expect(promise.then()).to.be.a(Denote);
@@ -41,6 +45,11 @@ describe('Denote', function() {
         expect(onFulfilled.called).to.be(true);
         done();
       });
+    });
+
+    it('transitions to the fulfilled state', function() {
+      promise.resolve();
+      expect(promise.state).to.be('fulfilled');
     });
 
     it('calls onFulfilled with with the promise value', function(done) {
@@ -114,6 +123,19 @@ describe('Denote', function() {
         });
       });
     });
+
+    it('only calls the onFulfilled handler once', function(done) {
+      promise.then(onFulfilled);
+      promise.resolve();
+      wait(function() {
+        expect(onFulfilled.calledOnce).to.be(true);
+        promise.resolve();
+        wait(function() {
+          expect(onFulfilled.calledOnce).to.be(true);
+          done();
+        });
+      });
+    });
   });
 
   describe('when a promise is rejected', function() {
@@ -131,6 +153,24 @@ describe('Denote', function() {
       wait(function() {
         expect(onRejected.called).to.be(true);
         done();
+      });
+    });
+
+    it('transitions to the rejected state', function() {
+      promise.reject();
+      expect(promise.state).to.be('rejected');
+    });
+
+    it('only calls the onRejected handler once', function(done) {
+      promise.then(undefined, onRejected);
+      promise.reject();
+      wait(function() {
+        expect(onRejected.calledOnce).to.be(true);
+        promise.reject();
+        wait(function() {
+          expect(onRejected.calledOnce).to.be(true);
+          done();
+        });
       });
     });
 
