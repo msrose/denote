@@ -24,27 +24,37 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
 };
 
 Denote.prototype.resolve = function(value) {
+  var self = this;
   if(this.state !== PENDING) {
     return;
   }
   if(value === this) {
     throw new TypeError();
   }
-  this.state = FULFILLED;
-  this.thenCalls.forEach(function(thenCall) {
-    if(isFunction(thenCall.onFulfilled)) {
-        setTimeout(function() {
-          try {
-            var returnValue = thenCall.onFulfilled(value);
-            thenCall.returnPromise.resolve(returnValue);
-          } catch(e) {
-            thenCall.returnPromise.reject(e);
-          }
-        });
-    } else {
-      thenCall.returnPromise.resolve(value);
-    }
-  });
+  if(value instanceof Denote) {
+    value.then(readyToFulfill, function(reason) {
+      self.reject(reason);
+    });
+  } else {
+    readyToFulfill(value);
+  }
+  function readyToFulfill(fulfillValue) {
+    self.state = FULFILLED;
+    self.thenCalls.forEach(function(thenCall) {
+      if(isFunction(thenCall.onFulfilled)) {
+          setTimeout(function() {
+            try {
+              var returnValue = thenCall.onFulfilled(fulfillValue);
+              thenCall.returnPromise.resolve(returnValue);
+            } catch(e) {
+              thenCall.returnPromise.reject(e);
+            }
+          });
+      } else {
+        thenCall.returnPromise.resolve(fulfillValue);
+      }
+    });
+  }
 };
 
 Denote.prototype.reject = function(reason) {

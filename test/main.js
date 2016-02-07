@@ -248,11 +248,49 @@ describe('Denote', function() {
   });
 
   describe('performing the promise resolution procedure', function() {
+    var onFulfilled, onRejected;
+
+    beforeEach(function() {
+      onFulfilled = sinon.spy();
+      onRejected = sinon.spy();
+    });
+
     it('rejects the prmomise if resolved with itself', function() {
       expect(function() {
         promise.resolve(promise);
       }).to.throwException(function(e) {
         expect(e).to.be.a(TypeError);
+      });
+    });
+
+    it('remains pending when resolved with a pending promise', function() {
+      promise.resolve(denote());
+      expect(promise.state).to.be('pending');
+    });
+
+    it('fulfills the promise when resolved with another promise that gets fulfilled', function(done) {
+      var promise2 = denote();
+      promise.then(onFulfilled);
+      promise.resolve(promise2);
+      promise2.resolve('yoyoyo');
+      wait(function() {
+        wait(function() {
+          expect(onFulfilled.calledWith('yoyoyo')).to.be(true);
+          done();
+        });
+      });
+    });
+
+    it('rejects the promise when resolved with another promise that gets rejected', function(done) {
+      var promise2 = denote();
+      promise.then(undefined, onRejected);
+      promise.resolve(promise2);
+      promise2.reject('a good reason');
+      wait(function() {
+        wait(function() {
+          expect(onRejected.calledWith('a good reason')).to.be(true);
+          done();
+        });
       });
     });
   });
