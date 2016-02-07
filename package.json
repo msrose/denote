@@ -1,0 +1,27 @@
+{
+  "name": "denote",
+  "version": "0.0.1",
+  "description": "An awesome JavaScript promise library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test",
+    "lint": "eslint index.js test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msrose/denote.git"
+  },
+  "keywords": [
+    "promise"
+  ],
+  "author": "Michael Rose",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/msrose/denote/issues"
+  },
+  "homepage": "https://github.com/msrose/denote#readme",
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "mocha": "^2.4.5"
+  }
+}
