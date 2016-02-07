@@ -2,6 +2,7 @@ var sinon = require('sinon');
 var expect = require('expect.js');
 
 var denote = require('..');
+var Denote = require('../denote');
 
 describe('The promise object', function() {
   var promise;
@@ -14,12 +15,20 @@ describe('The promise object', function() {
     expect(promise.then).to.be.a('function');
   });
 
+  describe('the then method', function() {
+    it('returns a promise', function() {
+      expect(promise.then()).to.be.a(Denote);
+    });
+  });
+
   describe('when the promise is resolved', function() {
     var onFulfilled;
 
     beforeEach(function() {
       onFulfilled = sinon.spy();
     });
+
+    it('ignores onFulfilled arguments that are not functions');
 
     it('calls the onFulfilled callback', function() {
       promise.then(onFulfilled);
@@ -61,6 +70,8 @@ describe('The promise object', function() {
     beforeEach(function() {
       onRejected = sinon.spy();
     });
+
+    it('ignores onRejected arguments that are not functions');
 
     it('calls the onRejected callback', function() {
       promise.then(undefined, onRejected);

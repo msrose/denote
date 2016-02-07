@@ -5,9 +5,18 @@ function Denote() {
   this.onRejectedCallbacks = [];
 }
 
+function isFunction(value) {
+  return typeof value === 'function';
+}
+
 Denote.prototype.then = function(onFulfilled, onRejected) {
-  this.onFulfilledCallbacks.push(onFulfilled);
-  this.onRejectedCallbacks.push(onRejected);
+  if(isFunction(onFulfilled)) {
+    this.onFulfilledCallbacks.push(onFulfilled);
+  }
+  if(isFunction(onRejected)) {
+    this.onRejectedCallbacks.push(onRejected);
+  }
+  return new Denote();
 };
 
 Denote.prototype.resolve = function(value) {
