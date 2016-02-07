@@ -8,7 +8,7 @@ function wait(callback) {
   setTimeout(callback);
 }
 
-describe('The promise object', function() {
+describe('Denote', function() {
   var promise;
 
   beforeEach(function() {
@@ -25,7 +25,7 @@ describe('The promise object', function() {
     });
   });
 
-  describe('when the promise is resolved', function() {
+  describe('when a promise is resolved', function() {
     var onFulfilled;
 
     beforeEach(function() {
@@ -102,9 +102,21 @@ describe('The promise object', function() {
         });
       });
     });
+
+    it('fulfills the returned promise the value onFulfilled returns', function(done) {
+      var promise2 = promise.then(function() { return 'llamas'; });
+      promise2.then(onFulfilled);
+      promise.resolve();
+      wait(function() {
+        wait(function() {
+          expect(onFulfilled.calledWith('llamas')).to.be(true);
+          done();
+        });
+      });
+    });
   });
 
-  describe('when the promise is rejected', function() {
+  describe('when a promise is rejected', function() {
     var onRejected;
 
     beforeEach(function() {
@@ -178,6 +190,29 @@ describe('The promise object', function() {
           expect(onRejected.calledWith(error)).to.be(true);
           done();
         });
+      });
+    });
+
+    it('fulfills the returned promise with the value onRejected returns', function(done) {
+      var onFulfilled = sinon.spy();
+      var promise2 = promise.then(undefined, function() { return 'hehe'; });
+      promise2.then(onFulfilled);
+      promise.reject();
+      wait(function() {
+        wait(function() {
+          expect(onFulfilled.calledWith('hehe')).to.be(true);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('performing the promise resolution procedure', function() {
+    it('rejects the prmomise if resolved with itself', function() {
+      expect(function() {
+        promise.resolve(promise);
+      }).to.throwException(function(e) {
+        expect(e).to.be.a(TypeError);
       });
     });
   });

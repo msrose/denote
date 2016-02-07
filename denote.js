@@ -19,11 +19,15 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
 };
 
 Denote.prototype.resolve = function(value) {
+  if(value === this) {
+    throw new TypeError();
+  }
   this.thenCalls.forEach(function(thenCall) {
     if(isFunction(thenCall.onFulfilled)) {
         setTimeout(function() {
           try {
-              thenCall.onFulfilled(value);
+            var returnValue = thenCall.onFulfilled(value);
+            thenCall.returnPromise.resolve(returnValue);
           } catch(e) {
             thenCall.returnPromise.reject(e);
           }
@@ -39,7 +43,8 @@ Denote.prototype.reject = function(reason) {
     if(isFunction(thenCall.onRejected)) {
         setTimeout(function() {
           try {
-            thenCall.onRejected(reason);
+            var returnValue = thenCall.onRejected(reason);
+            thenCall.returnPromise.resolve(returnValue);
           } catch(e) {
             thenCall.returnPromise.reject(e);
           }
