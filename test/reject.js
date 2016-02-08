@@ -123,4 +123,13 @@ describe('when a promise is rejected', function() {
       });
     });
   });
+
+  it('calls the onRejected handler without a this value', function(done) {
+    promise.then(undefined, onRejected);
+    promise.reject('a good reason');
+    wait(function() {
+      expect(onRejected.calledOn(undefined)).to.be(true);
+      done();
+    });
+  });
 });

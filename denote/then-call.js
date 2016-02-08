@@ -15,7 +15,7 @@ ThenCall.prototype.fulfill = function(value) {
     var thenCall = this;
     setTimeout(function() {
       try {
-        var returnValue = thenCall.onFulfilled(value);
+        var returnValue = thenCall.onFulfilled.call(undefined, value);
         thenCall.returnPromise.resolve(returnValue);
       } catch (e) {
         thenCall.returnPromise.reject(e);
@@ -31,7 +31,7 @@ ThenCall.prototype.reject = function(reason) {
     var thenCall = this;
     setTimeout(function() {
       try {
-        var returnValue = thenCall.onRejected(reason);
+        var returnValue = thenCall.onRejected.call(undefined, reason);
         thenCall.returnPromise.resolve(returnValue);
       } catch (e) {
         thenCall.returnPromise.reject(e);

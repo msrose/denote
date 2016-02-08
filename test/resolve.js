@@ -140,4 +140,13 @@ describe('Resolving a promise', function() {
       });
     });
   });
+
+  it('calls the onFulfilled handler without a this value', function(done) {
+    promise.then(onFulfilled);
+    promise.resolve();
+    wait(function() {
+      expect(onFulfilled.calledOn(undefined)).to.be(true);
+      done();
+    });
+  });
 });
