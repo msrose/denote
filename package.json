@@ -5,7 +5,8 @@
   "main": "denote/index.js",
   "scripts": {
     "test": "mocha test",
-    "lint": "eslint denote/**/*.js test/**/*.js"
+    "lint": "eslint denote/**/*.js test/**/*.js",
+    "test-aplus": "promises-aplus-tests test/adapter.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "eslint": "^1.10.3",
     "expect.js": "^0.3.1",
     "mocha": "^2.4.5",
+    "promises-aplus-tests": "*",
     "sinon": "^1.17.3"
   }
 }
