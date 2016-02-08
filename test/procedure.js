@@ -6,7 +6,7 @@ var wait = require('./wait');
 
 var denote = require('../denote');
 
-describe('performing the promise resolution procedure', function() {
+describe('Performing the promise resolution procedure', function() {
   var onFulfilled, onRejected, promise;
 
   beforeEach(function() {
@@ -156,6 +156,22 @@ describe('performing the promise resolution procedure', function() {
       wait(function() {
         expect(onFulfilled.calledWith(thenable)).to.be(true);
         done();
+      });
+    });
+
+    it('resolves the promise when resolvePromise is called with a promise', function(done) {
+      var promise2 = denote();
+      thenable.then = function(resolvePromise) {
+        resolvePromise(promise2);
+      };
+      promise.then(onFulfilled);
+      promise.resolve(thenable);
+      promise2.resolve('here i am');
+      wait(function() {
+        wait(function() {
+          expect(onFulfilled.calledWith('here i am')).to.be(true);
+          done();
+        });
       });
     });
   });

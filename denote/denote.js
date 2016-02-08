@@ -48,7 +48,11 @@ Denote.prototype.resolve = function(value) {
     try {
       var then = value.then;
       if (isFunction(then)) {
-        then.call(value, fulfill.bind(this), this.reject.bind(this));
+        var self = this;
+        then.call(value, function(resolveValue) {
+          self.resolving = false;
+          self.resolve(resolveValue);
+        }, this.reject.bind(this));
       } else {
         fulfill.call(this, value);
       }
