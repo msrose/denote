@@ -133,7 +133,7 @@ describe('Denote', function() {
       });
     });
 
-    it('only calls the onFulfilled handler once', function(done) {
+    it('calls the onFulfilled handler only once', function(done) {
       promise.then(onFulfilled);
       promise.resolve();
       wait(function() {
@@ -142,6 +142,23 @@ describe('Denote', function() {
         wait(function() {
           expect(onFulfilled.calledOnce).to.be(true);
           done();
+        });
+      });
+    });
+
+    it('calls the onFulfilled handler only once when resolved with another promise', function(done) {
+      var promise2 = denote();
+      promise.then(onFulfilled);
+      promise.resolve(promise2);
+      promise.resolve(promise2);
+      promise2.resolve('hehe');
+      wait(function() {
+        wait(function() {
+          expect(onFulfilled.calledOnce).to.be(true);
+          wait(function() {
+            expect(onFulfilled.calledOnce).to.be(true);
+            done();
+          });
         });
       });
     });
@@ -273,7 +290,7 @@ describe('Denote', function() {
       onRejected = sinon.spy();
     });
 
-    it('rejects the prmomise if resolved with itself', function() {
+    it('rejects the promise if resolved with itself', function() {
       expect(function() {
         promise.resolve(promise);
       }).to.throwException(function(e) {
@@ -340,6 +357,80 @@ describe('Denote', function() {
             expect(onRejected.calledWith('here it is')).to.be(true);
             done();
           });
+        });
+      });
+    });
+
+    describe('when resolved with a thenable', function() {
+      var thenable;
+
+      beforeEach(function() {
+        thenable = { then: sinon.spy() };
+      });
+
+      it('calls then if it is a function with two function arguments', function(done) {
+        promise.resolve(thenable);
+        wait(function() {
+          expect(thenable.then.calledWith(sinon.match.func, sinon.match.func)).to.be(true);
+          done();
+        });
+      });
+
+      it('rejects the promise if calling then throws an error', function(done) {
+        var error = new Error();
+        thenable.then = function() { throw error; };
+        promise.then(undefined, onRejected);
+        promise.resolve(thenable);
+        wait(function() {
+          expect(onRejected.calledWith(error)).to.be(true);
+          done();
+        });
+      });
+
+      it('resolves the promise when resolvePromise callback called with first argument', function(done) {
+        thenable.then = function(resolvePromise) {
+          resolvePromise('llamas');
+        };
+        promise.then(onFulfilled);
+        promise.resolve(thenable);
+        wait(function() {
+          expect(onFulfilled.calledWith('llamas')).to.be(true);
+          done();
+        });
+      });
+
+      it('rejects the promise when rejectPromise callback called with first argument', function(done) {
+        thenable.then = function(resolvePromise, rejectPromise) {
+          rejectPromise('dragons');
+        };
+        promise.then(undefined, onRejected);
+        promise.resolve(thenable);
+        wait(function() {
+          expect(onRejected.calledWith('dragons')).to.be(true);
+          done();
+        });
+      });
+
+      it('ignores multiple calls to the resolvePromise callback', function(done) {
+        thenable.then = function(resolvePromise) {
+          resolvePromise('here we are');
+          resolvePromise('here we are again');
+        };
+        promise.then(onFulfilled);
+        promise.resolve(thenable);
+        wait(function() {
+          expect(onFulfilled.calledOnce).to.be(true);
+          done();
+        });
+      });
+
+      it('fulfills promise with the thenable if then property is not a function', function(done) {
+        thenable.then = 'not a function';
+        promise.then(onFulfilled);
+        promise.resolve(thenable);
+        wait(function() {
+          expect(onFulfilled.calledWith(thenable)).to.be(true);
+          done();
         });
       });
     });
