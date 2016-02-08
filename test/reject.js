@@ -124,4 +124,3 @@ describe('when a promise is rejected', function() {
     });
   });
 });
-

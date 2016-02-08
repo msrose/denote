@@ -1,8 +1,6 @@
 'use strict';
 
-var sinon = require('sinon');
 var expect = require('expect.js');
-var wait = require('./wait');
 
 var denote = require('../denote');
 var Denote = require('../denote/denote');

@@ -141,4 +141,3 @@ describe('Resolving a promise', function() {
     });
   });
 });
-
