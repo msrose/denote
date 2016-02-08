@@ -11,7 +11,7 @@ function isFunction(value) {
 }
 
 function isObject(value) {
-  return typeof value === 'object';
+  return value !== null && typeof value === 'object';
 }
 
 function Denote() {

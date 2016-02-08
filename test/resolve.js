@@ -149,4 +149,13 @@ describe('Resolving a promise', function() {
       done();
     });
   });
+
+  it('works correctly with a null resolve value', function(done) {
+    promise.then(onFulfilled);
+    promise.resolve(null);
+    wait(function() {
+      expect(onFulfilled.calledWith(null)).to.be(true);
+      done();
+    });
+  });
 });
