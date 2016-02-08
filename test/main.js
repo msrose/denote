@@ -88,6 +88,15 @@ describe('Denote', function() {
       });
     });
 
+    it('calls the onFulfilled callback if the promise has already been fulfilled', function(done) {
+      promise.resolve('best value');
+      promise.then(onFulfilled);
+      wait(function() {
+        expect(onFulfilled.calledWith('best value')).to.be(true);
+        done();
+      });
+    });
+
     it('resolves the returned promise on resolve if onFulfilled is not a function', function(done) {
       var promise2 = promise.then('not a function');
       promise2.then(onFulfilled);
@@ -179,6 +188,15 @@ describe('Denote', function() {
       promise.reject('my reason');
       wait(function() {
         expect(onRejected.calledWith('my reason')).to.be(true);
+        done();
+      });
+    });
+
+    it('calls the onRejected callback if the promise has already been rejected', function(done) {
+      promise.reject('best reason');
+      promise.then(undefined, onRejected);
+      wait(function() {
+        expect(onRejected.calledWith('best reason')).to.be(true);
         done();
       });
     });
@@ -290,6 +308,38 @@ describe('Denote', function() {
         wait(function() {
           expect(onRejected.calledWith('a good reason')).to.be(true);
           done();
+        });
+      });
+    });
+
+    it('fulfills the promise when resolved with another promise that is already fulfilled', function(done) {
+      promise.resolve('here it is');
+      var promise2 = denote();
+      promise2.then(onFulfilled);
+      wait(function() {
+        expect(promise.state).to.be('fulfilled');
+        promise2.resolve(promise);
+        wait(function() {
+          wait(function() {
+            expect(onFulfilled.calledWith('here it is')).to.be(true);
+            done();
+          });
+        });
+      });
+    });
+
+    it('rejects the promise when resolved with another promise that is already rejected', function(done) {
+      promise.reject('here it is');
+      var promise2 = denote();
+      promise2.then(undefined, onRejected);
+      wait(function() {
+        expect(promise.state).to.be('rejected');
+        promise2.resolve(promise);
+        wait(function() {
+          wait(function() {
+            expect(onRejected.calledWith('here it is')).to.be(true);
+            done();
+          });
         });
       });
     });

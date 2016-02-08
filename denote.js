@@ -1,5 +1,7 @@
 'use strict';
 
+var ThenCall = require('./then-call');
+
 var PENDING = 'pending',
   FULFILLED = 'fulfilled',
   REJECTED = 'rejected';
@@ -7,19 +9,19 @@ var PENDING = 'pending',
 function Denote() {
   this.thenCalls = [];
   this.state = PENDING;
-}
-
-function isFunction(value) {
-  return typeof value === 'function';
+  this.value = undefined;
+  this.reason = undefined;
 }
 
 Denote.prototype.then = function(onFulfilled, onRejected) {
-  var thenCall = {
-    onFulfilled: onFulfilled,
-    onRejected: onRejected,
-    returnPromise: new Denote()
-  };
-  this.thenCalls.push(thenCall);
+  var thenCall = new ThenCall(onFulfilled, onRejected, new Denote());
+  if(this.state === FULFILLED) {
+    thenCall.fulfill(this.value);
+  } else if(this.state === REJECTED) {
+    thenCall.reject(this.reason);
+  } else {
+    this.thenCalls.push(thenCall);
+  }
   return thenCall.returnPromise;
 };
 
@@ -37,19 +39,9 @@ Denote.prototype.resolve = function(value) {
   }
   function fulfill(fulfillValue) {
     this.state = FULFILLED;
+    this.value = fulfillValue;
     this.thenCalls.forEach(function(thenCall) {
-      if (isFunction(thenCall.onFulfilled)) {
-        setTimeout(function() {
-          try {
-            var returnValue = thenCall.onFulfilled(fulfillValue);
-            thenCall.returnPromise.resolve(returnValue);
-          } catch (e) {
-            thenCall.returnPromise.reject(e);
-          }
-        });
-      } else {
-        thenCall.returnPromise.resolve(fulfillValue);
-      }
+      thenCall.fulfill(fulfillValue);
     });
   }
 };
@@ -59,19 +51,9 @@ Denote.prototype.reject = function(reason) {
     return;
   }
   this.state = REJECTED;
+  this.reason = reason;
   this.thenCalls.forEach(function(thenCall) {
-    if (isFunction(thenCall.onRejected)) {
-      setTimeout(function() {
-        try {
-          var returnValue = thenCall.onRejected(reason);
-          thenCall.returnPromise.resolve(returnValue);
-        } catch (e) {
-          thenCall.returnPromise.reject(e);
-        }
-      });
-    } else {
-      thenCall.returnPromise.reject(reason);
-    }
+    thenCall.reject(reason);
   });
 };
 
