@@ -1,7 +1,7 @@
 {
   "name": "denote",
   "version": "0.0.1",
-  "description": "An awesome JavaScript promise library",
+  "description": "An awesome Promises/A+ compliant JavaScript promise implementation",
   "main": "denote/index.js",
   "scripts": {
     "test": "mocha test",
@@ -12,7 +12,12 @@
     "url": "git+https://github.com/msrose/denote.git"
   },
   "keywords": [
-    "promise"
+    "promise",
+    "promises",
+    "asynchronous",
+    "a+",
+    "a plus",
+    "aplus"
   ],
   "author": "Michael Rose",
   "license": "MIT",
