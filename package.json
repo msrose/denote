@@ -2,7 +2,7 @@
   "name": "denote",
   "version": "0.0.1",
   "description": "An awesome JavaScript promise library",
-  "main": "index.js",
+  "main": "denote/index.js",
   "scripts": {
     "test": "mocha test",
     "lint": "eslint *.js test/**/*.js"
