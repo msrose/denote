@@ -1,11 +1,11 @@
 'use strict';
 
-var ThenCall = require('./then-call');
 var _ = require('./utils');
+var ThenCall = require('./then-call');
 
-var PENDING = 'pending',
-  FULFILLED = 'fulfilled',
-  REJECTED = 'rejected';
+var PENDING = _.states.PENDING,
+  FULFILLED = _.states.FULFILLED,
+  REJECTED = _.states.REJECTED;
 
 function Denote() {
   this.thenCalls = [];

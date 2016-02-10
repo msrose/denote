@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var expect = require('expect.js');
 var wait = require('./wait');
 
+var states = require('../denote/utils').states;
 var denote = require('../denote');
 
 describe('Resolving a promise', function() {
@@ -27,7 +28,7 @@ describe('Resolving a promise', function() {
 
   it('transitions to the fulfilled state', function() {
     promise.resolve();
-    expect(promise.state).to.be('fulfilled');
+    expect(promise.state).to.be(states.FULFILLED);
   });
 
   it('calls onFulfilled with with the promise value', function(done) {

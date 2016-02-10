@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var expect = require('expect.js');
 var wait = require('./wait');
 
+var states = require('../denote/utils').states;
 var denote = require('../denote');
 
 describe('Performing the promise resolution procedure', function() {
@@ -25,7 +26,7 @@ describe('Performing the promise resolution procedure', function() {
 
   it('remains pending when resolved with a pending promise', function() {
     promise.resolve(denote());
-    expect(promise.state).to.be('pending');
+    expect(promise.state).to.be(states.PENDING);
   });
 
   it('fulfills the promise when resolved with another promise that gets fulfilled', function(done) {
@@ -59,7 +60,7 @@ describe('Performing the promise resolution procedure', function() {
     var promise2 = denote();
     promise2.then(onFulfilled);
     wait(function() {
-      expect(promise.state).to.be('fulfilled');
+      expect(promise.state).to.be(states.FULFILLED);
       promise2.resolve(promise);
       wait(function() {
         wait(function() {
@@ -75,7 +76,7 @@ describe('Performing the promise resolution procedure', function() {
     var promise2 = denote();
     promise2.then(undefined, onRejected);
     wait(function() {
-      expect(promise.state).to.be('rejected');
+      expect(promise.state).to.be(states.REJECTED);
       promise2.resolve(promise);
       wait(function() {
         wait(function() {

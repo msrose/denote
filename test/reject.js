@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var expect = require('expect.js');
 var wait = require('./wait');
 
+var states = require('../denote/utils').states;
 var denote = require('../denote');
 
 describe('when a promise is rejected', function() {
@@ -27,7 +28,7 @@ describe('when a promise is rejected', function() {
 
   it('transitions to the rejected state', function() {
     promise.reject();
-    expect(promise.state).to.be('rejected');
+    expect(promise.state).to.be(states.REJECTED);
   });
 
   it('only calls the onRejected handler once', function(done) {

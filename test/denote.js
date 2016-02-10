@@ -2,6 +2,7 @@
 
 var expect = require('expect.js');
 
+var states = require('../denote/utils').states;
 var denote = require('../denote');
 var Denote = require('../denote/denote');
 
@@ -17,7 +18,7 @@ describe('Denote', function() {
   });
 
   it('starts out in pending state', function() {
-    expect(promise.state).to.be('pending');
+    expect(promise.state).to.be(states.PENDING);
   });
 
   describe('the then method', function() {

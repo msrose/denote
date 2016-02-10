@@ -4,7 +4,7 @@ A JavaScript promise library - because we don't have enough of those already.
 
 - Micro API - only what you need
 - No external dependencies
-- Meets the [Promises/A+ specification](https://promisesaplus.com/).
+- Meets the [Promises/A+ specification](https://promisesaplus.com/)
 
 ## Installation
 

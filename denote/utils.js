@@ -7,3 +7,9 @@ exports.isFunction = function(value) {
 exports.isObject = function(value) {
   return value !== null && typeof value === 'object';
 };
+
+exports.states = {
+  PENDING: 'pending',
+  FULFILLED: 'fulfilled',
+  REJECTED: 'rejected'
+};
