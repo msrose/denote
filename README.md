@@ -44,13 +44,24 @@ createPromise(14).then(function(value) {
 
 Create a new promise object:
 
+### require('denote')
+
+A function that creates a new instance of a Denote promise.
+For example:
+
 ```
 var denote = require('denote');
 var promise = denote();
 ```
 
-The returned object is an instance of a `Denote` object, which is a
-promise representing the future result of an asynchronous operation.
+#### Parameters
+
+None
+
+#### Return Value
+
+An instance of a `Denote` object, which is a promise representing
+the future result of an asynchronous operation.
 
 ### Denote.prototype.then(onFulfilled, onRejected)
 
@@ -93,7 +104,7 @@ To be called when the asynchronous operation fails.
 
 `undefined`
 
-## Developing
+## Contributing
 
 ```
 git clone https://github.com/msrose/denote.git
@@ -101,8 +112,13 @@ cd denote
 npm install
 ```
 
-Before submitting a pull request, make sure that the code conforms to the
-eslint configuration for this project, and that all the tests pass:
+To run the project's own test suite: `npm test`
+To run the Promises/A+ compliance tests: `npm run test:aplus`
+
+Before submitting a pull request, make sure that:
+- you've written tests for any new features,
+- the code conforms to the eslint configuration for this project,
+- and that all the tests pass
 
 ```
 npm run lint && npm run test:all
