@@ -39,28 +39,36 @@ Denote.prototype.resolve = function(value) {
   if (value instanceof Denote) {
     value.then(fulfill, self.reject.bind(self));
   } else if (_.isObject(value) || _.isFunction(value)) {
+    var called = false;
     try {
       var then = value.then;
       if (_.isFunction(then)) {
         var resolveFunction = function(resolveValue) {
-          self.resolving = false;
-          self.resolve(resolveValue);
+          if(!called) {
+            called = true;
+            self.resolving = false;
+            self.resolve(resolveValue);
+          }
         };
-        var rejectFunction = self.reject.bind(self);
+        var rejectFunction = function(rejectValue) {
+          if(!called) {
+            called = true;
+            self.reject(rejectValue);
+          }
+        };
         then.call(value, resolveFunction, rejectFunction);
       } else {
         fulfill(value);
       }
     } catch (e) {
-      self.reject(e);
+      if(!called) {
+        self.reject(e);
+      }
     }
   } else {
     fulfill(value);
   }
   function fulfill(fulfillValue) {
-    if (self.state !== PENDING) {
-      return;
-    }
     self.state = FULFILLED;
     self.resolving = false;
     self.value = fulfillValue;

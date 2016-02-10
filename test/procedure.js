@@ -174,5 +174,65 @@ describe('Performing the promise resolution procedure', function() {
         });
       });
     });
+
+    it('ignores a second call to resolvePromise when using a custom thenable', function() {
+      thenable.then = function(resolvePromise) {
+        resolvePromise();
+        resolvePromise();
+      };
+      var spy = sinon.spy(promise, 'resolve');
+      promise.resolve(thenable);
+      expect(spy.calledTwice).to.be(true);
+    });
+
+    it('ignores a second call to rejectPromise when using a custom thenable', function() {
+      thenable.then = function(resolvePromise, rejectPromise) {
+        rejectPromise();
+        rejectPromise();
+      };
+      var spy = sinon.spy(promise, 'reject');
+      promise.resolve(thenable);
+      expect(spy.calledOnce).to.be(true);
+    });
+
+    it('ignores a call to rejectPromise if resolvePromise has already been called', function() {
+      thenable.then = function(resolvePromise, rejectPromise) {
+        resolvePromise();
+        rejectPromise();
+      };
+      var spy = sinon.spy(promise, 'reject');
+      promise.resolve(thenable);
+      expect(spy.called).to.be(false);
+    });
+
+    it('ignores a call to resolvePromise if rejectPromise has already been called', function() {
+      thenable.then = function(resolvePromise, rejectPromise) {
+        rejectPromise();
+        resolvePromise();
+      };
+      var spy = sinon.spy(promise, 'resolve');
+      promise.resolve(thenable);
+      expect(spy.calledOnce).to.be(true);
+    });
+
+    it('ignores an error thrown from the custom then method if resolvePromise has been called', function() {
+      thenable.then = function(resolvePromise) {
+        resolvePromise();
+        throw new Error();
+      };
+      var spy = sinon.spy(promise, 'reject');
+      promise.resolve(thenable);
+      expect(spy.called).to.be(false);
+    });
+
+    it('ignores an error thrown from the custom then method if rejectPromise has been called', function() {
+      thenable.then = function(resolvePromise, rejectPromise) {
+        rejectPromise();
+        throw new Error();
+      };
+      var spy = sinon.spy(promise, 'reject');
+      promise.resolve(thenable);
+      expect(spy.calledOnce).to.be(true);
+    });
   });
 });
