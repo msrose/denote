@@ -28,41 +28,41 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
 };
 
 Denote.prototype.resolve = function(value) {
-  if (this.state !== PENDING || this.resolving) {
+  var self = this;
+  if (self.state !== PENDING || self.resolving) {
     return;
   }
-  if (value === this) {
+  if (value === self) {
     throw new TypeError();
   }
-  this.resolving = true;
+  self.resolving = true;
   if (value instanceof Denote) {
-    value.then(fulfill.bind(this), this.reject.bind(this));
+    value.then(fulfill, self.reject.bind(self));
   } else if (_.isObject(value) || _.isFunction(value)) {
     try {
       var then = value.then;
       if (_.isFunction(then)) {
-        var self = this;
         then.call(value, function(resolveValue) {
           self.resolving = false;
           self.resolve(resolveValue);
-        }, this.reject.bind(this));
+        }, self.reject.bind(self));
       } else {
-        fulfill.call(this, value);
+        fulfill.call(self, value);
       }
     } catch (e) {
-      this.reject(e);
+      self.reject(e);
     }
   } else {
-    fulfill.call(this, value);
+    fulfill(value);
   }
   function fulfill(fulfillValue) {
-    if (this.state !== PENDING) {
+    if (self.state !== PENDING) {
       return;
     }
-    this.state = FULFILLED;
-    this.resolving = false;
-    this.value = fulfillValue;
-    this.thenCalls.forEach(function(thenCall) {
+    self.state = FULFILLED;
+    self.resolving = false;
+    self.value = fulfillValue;
+    self.thenCalls.forEach(function(thenCall) {
       thenCall.fulfill(fulfillValue);
     });
   }
