@@ -1,7 +1,3 @@
-<a href="https://promisesaplus.com/" style="float:right">
-  ![Promises/A+ logo](https://promisesaplus.com/assets/logo-small.png)
-</a>
-
 # Denote
 
 A JavaScript promise library - because we don't have enough of those already.
