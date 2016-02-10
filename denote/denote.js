@@ -42,12 +42,14 @@ Denote.prototype.resolve = function(value) {
     try {
       var then = value.then;
       if (_.isFunction(then)) {
-        then.call(value, function(resolveValue) {
+        var resolveFunction = function(resolveValue) {
           self.resolving = false;
           self.resolve(resolveValue);
-        }, self.reject.bind(self));
+        };
+        var rejectFunction = self.reject.bind(self);
+        then.call(value, resolveFunction, rejectFunction);
       } else {
-        fulfill.call(self, value);
+        fulfill(value);
       }
     } catch (e) {
       self.reject(e);
