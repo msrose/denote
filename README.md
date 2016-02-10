@@ -1,8 +1,8 @@
-# Denote
-
-<a href="https://promisesaplus.com/">
+<a href="https://promisesaplus.com/" style="float:right">
   ![Promises/A+ logo](https://promisesaplus.com/assets/logo-small.png)
 </a>
+
+# Denote
 
 A JavaScript promise library - because we don't have enough of those already.
 
@@ -64,8 +64,8 @@ None
 
 #### Return Value
 
-An instance of a `Denote` object, which is a promise representing
-the future result of an asynchronous operation.
+A function that when called returns a new instance of a `Denote` object,
+which is a promise representing the future result of an asynchronous operation.
 
 ### Denote.prototype.then(onFulfilled, onRejected)
 
