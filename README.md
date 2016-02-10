@@ -123,3 +123,15 @@ Before submitting a pull request, make sure that:
 ```
 npm run lint && npm run test:all
 ```
+
+## Making a Release
+
+```
+git checkout develop
+npm version major|minor|patch
+git push origin develop
+git checkout master
+git merge develop
+git push origin --tags master
+npm publish
+```
