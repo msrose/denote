@@ -1,5 +1,9 @@
 # Denote
 
+<a href="https://promisesaplus.com/">
+  ![Promises/A+ logo](https://promisesaplus.com/assets/logo-small.png)
+</a>
+
 A JavaScript promise library - because we don't have enough of those already.
 
 - Micro API - only what you need
@@ -113,7 +117,7 @@ npm install
 ```
 
 To run the project's own test suite: `npm test`
-To run the Promises/A+ compliance tests: `npm run test:aplus`
+To run the [Promises/A+ compliance tests](https://github.com/promises-aplus/promises-tests): `npm run test:aplus`
 
 Before submitting a pull request, make sure that:
 - you've written tests for any new features,
