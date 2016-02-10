@@ -44,14 +44,14 @@ Denote.prototype.resolve = function(value) {
       var then = value.then;
       if (_.isFunction(then)) {
         var resolveFunction = function(resolveValue) {
-          if(!called) {
+          if (!called) {
             called = true;
             self.resolving = false;
             self.resolve(resolveValue);
           }
         };
         var rejectFunction = function(rejectValue) {
-          if(!called) {
+          if (!called) {
             called = true;
             self.reject(rejectValue);
           }
@@ -61,7 +61,7 @@ Denote.prototype.resolve = function(value) {
         fulfill(value);
       }
     } catch (e) {
-      if(!called) {
+      if (!called) {
         self.reject(e);
       }
     }

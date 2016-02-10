@@ -1,8 +1,10 @@
 # Denote
 
-A JavaScript promise library, because we don't have enough of those already.
+A JavaScript promise library - because we don't have enough of those already.
 
-Aims to meet the [Promises/A+ standard](https://promisesaplus.com/).
+- Micro API - only what you need
+- No external dependencies
+- Meets the [Promises/A+ specification](https://promisesaplus.com/).
 
 ## Installation
 
@@ -99,10 +101,9 @@ cd denote
 npm install
 ```
 
-Before submitting a pull request, make sure all of the tests pass,
-and that the code conforms to the eslint configuration for this project:
+Before submitting a pull request, make sure that the code conforms to the
+eslint configuration for this project, and that all the tests pass:
 
 ```
-npm test
-npm run lint
+npm run lint && npm run test:all
 ```
