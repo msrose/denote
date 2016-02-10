@@ -1,3 +1,5 @@
 test/
 .eslintrc
 .gitignore
+.nvmrc
+.npmignore
