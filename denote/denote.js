@@ -1,18 +1,11 @@
 'use strict';
 
 var ThenCall = require('./then-call');
+var _ = require('./utils');
 
 var PENDING = 'pending',
   FULFILLED = 'fulfilled',
   REJECTED = 'rejected';
-
-function isFunction(value) {
-  return typeof value === 'function';
-}
-
-function isObject(value) {
-  return value !== null && typeof value === 'object';
-}
 
 function Denote() {
   this.thenCalls = [];
@@ -44,10 +37,10 @@ Denote.prototype.resolve = function(value) {
   this.resolving = true;
   if (value instanceof Denote) {
     value.then(fulfill.bind(this), this.reject.bind(this));
-  } else if (isObject(value) || isFunction(value)) {
+  } else if (_.isObject(value) || _.isFunction(value)) {
     try {
       var then = value.then;
-      if (isFunction(then)) {
+      if (_.isFunction(then)) {
         var self = this;
         then.call(value, function(resolveValue) {
           self.resolving = false;

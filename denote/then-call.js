@@ -1,17 +1,15 @@
 'use strict';
 
+var _ = require('./utils');
+
 function ThenCall(onFulfilled, onRejected, returnPromise) {
   this.onFulfilled = onFulfilled;
   this.onRejected = onRejected;
   this.returnPromise = returnPromise;
 }
 
-function isFunction(value) {
-  return typeof value === 'function';
-}
-
 ThenCall.prototype.fulfill = function(value) {
-  if (isFunction(this.onFulfilled)) {
+  if (_.isFunction(this.onFulfilled)) {
     var thenCall = this;
     setTimeout(function() {
       try {
@@ -27,7 +25,7 @@ ThenCall.prototype.fulfill = function(value) {
 };
 
 ThenCall.prototype.reject = function(reason) {
-  if (isFunction(this.onRejected)) {
+  if (_.isFunction(this.onRejected)) {
     var thenCall = this;
     setTimeout(function() {
       try {

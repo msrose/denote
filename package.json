@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha test",
     "lint": "eslint denote/**/*.js test/**/*.js",
-    "test-aplus": "promises-aplus-tests test/adapter.js"
+    "test:aplus": "promises-aplus-tests test/adapter.js",
+    "test:all": "npm test && npm run test:aplus"
   },
   "repository": {
     "type": "git",
