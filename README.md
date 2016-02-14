@@ -1,5 +1,7 @@
 # Denote
 
+[![devDependency Status](https://david-dm.org/msrose/denote/dev-status.svg)](https://david-dm.org/msrose/denote#info=devDependencies)
+
 A JavaScript promise library - because we don't have enough of those already.
 
 - Micro API - only what you need
