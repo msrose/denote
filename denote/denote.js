@@ -1,3 +1,8 @@
+/**
+ * Author: Michael Rose
+ * License: MIT
+ */
+
 'use strict';
 
 var _ = require('./utils');
@@ -17,9 +22,9 @@ function Denote() {
 
 Denote.prototype.then = function(onFulfilled, onRejected) {
   var thenCall = new ThenCall(onFulfilled, onRejected, new Denote());
-  if (this.state === FULFILLED) {
+  if(this.state === FULFILLED) {
     thenCall.fulfill(this.value);
-  } else if (this.state === REJECTED) {
+  } else if(this.state === REJECTED) {
     thenCall.reject(this.reason);
   } else {
     this.thenCalls.push(thenCall);
@@ -29,29 +34,29 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
 
 Denote.prototype.resolve = function(value) {
   var self = this;
-  if (self.state !== PENDING || self.resolving) {
+  if(self.state !== PENDING || self.resolving) {
     return;
   }
-  if (value === self) {
+  if(value === self) {
     throw new TypeError();
   }
   self.resolving = true;
-  if (value instanceof Denote) {
+  if(value instanceof Denote) {
     value.then(fulfill, self.reject.bind(self));
-  } else if (_.isObject(value) || _.isFunction(value)) {
+  } else if(_.isObject(value) || _.isFunction(value)) {
     var called = false;
     try {
       var then = value.then;
-      if (_.isFunction(then)) {
+      if(_.isFunction(then)) {
         var resolveFunction = function(resolveValue) {
-          if (!called) {
+          if(!called) {
             called = true;
             self.resolving = false;
             self.resolve(resolveValue);
           }
         };
         var rejectFunction = function(rejectValue) {
-          if (!called) {
+          if(!called) {
             called = true;
             self.reject(rejectValue);
           }
@@ -60,8 +65,8 @@ Denote.prototype.resolve = function(value) {
       } else {
         fulfill(value);
       }
-    } catch (e) {
-      if (!called) {
+    } catch(e) {
+      if(!called) {
         self.reject(e);
       }
     }
@@ -79,7 +84,7 @@ Denote.prototype.resolve = function(value) {
 };
 
 Denote.prototype.reject = function(reason) {
-  if (this.state !== PENDING) {
+  if(this.state !== PENDING) {
     return;
   }
   this.state = REJECTED;

@@ -19,7 +19,7 @@ npm install denote
 ```js
 var denote = require('denote');
 
-function createPromise(n) {
+function verifyParity(n) {
   var promise = denote();
   console.log('Calculating...');
   setTimeout(function() {
@@ -32,7 +32,7 @@ function createPromise(n) {
   return promise;
 }
 
-createPromise(14).then(function(value) {
+verifyParity(14).then(function(value) {
   console.log('fulfilled', value);
   return 'llamas';
 }, function(reason) {

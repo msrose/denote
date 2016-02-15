@@ -1,3 +1,5 @@
+'use strict';
+
 var denote = require('../denote');
 
 exports.deferred = function() {

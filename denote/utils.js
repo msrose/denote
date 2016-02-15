@@ -1,3 +1,8 @@
+/**
+ * Author: Michael Rose
+ * License: MIT
+ */
+
 'use strict';
 
 exports.isFunction = function(value) {

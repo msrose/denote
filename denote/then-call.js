@@ -1,3 +1,8 @@
+/**
+ * Author: Michael Rose
+ * License: MIT
+ */
+
 'use strict';
 
 var _ = require('./utils');
@@ -9,13 +14,13 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
 }
 
 ThenCall.prototype.fulfill = function(value) {
-  if (_.isFunction(this.onFulfilled)) {
+  if(_.isFunction(this.onFulfilled)) {
     var thenCall = this;
     setTimeout(function() {
       try {
         var returnValue = thenCall.onFulfilled.call(undefined, value);
         thenCall.returnPromise.resolve(returnValue);
-      } catch (e) {
+      } catch(e) {
         thenCall.returnPromise.reject(e);
       }
     });
@@ -25,13 +30,13 @@ ThenCall.prototype.fulfill = function(value) {
 };
 
 ThenCall.prototype.reject = function(reason) {
-  if (_.isFunction(this.onRejected)) {
+  if(_.isFunction(this.onRejected)) {
     var thenCall = this;
     setTimeout(function() {
       try {
         var returnValue = thenCall.onRejected.call(undefined, reason);
         thenCall.returnPromise.resolve(returnValue);
-      } catch (e) {
+      } catch(e) {
         thenCall.returnPromise.reject(e);
       }
     });
