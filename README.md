@@ -1,5 +1,6 @@
 # Denote
 
+[![npm version](https://badge.fury.io/js/denote.svg)](https://badge.fury.io/js/denote)
 [![devDependency Status](https://david-dm.org/msrose/denote/dev-status.svg)](https://david-dm.org/msrose/denote#info=devDependencies)
 
 A JavaScript promise library - because we don't have enough of those already.
