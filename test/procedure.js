@@ -35,10 +35,8 @@ describe('Performing the promise resolution procedure', function() {
     promise.resolve(promise2);
     promise2.resolve('yoyoyo');
     wait(function() {
-      wait(function() {
-        expect(onFulfilled.calledWith('yoyoyo')).to.be(true);
-        done();
-      });
+      expect(onFulfilled.calledWith('yoyoyo')).to.be(true);
+      done();
     });
   });
 
@@ -48,10 +46,8 @@ describe('Performing the promise resolution procedure', function() {
     promise.resolve(promise2);
     promise2.reject('a good reason');
     wait(function() {
-      wait(function() {
-        expect(onRejected.calledWith('a good reason')).to.be(true);
-        done();
-      });
+      expect(onRejected.calledWith('a good reason')).to.be(true);
+      done();
     });
   });
 
@@ -63,10 +59,8 @@ describe('Performing the promise resolution procedure', function() {
       expect(promise.state).to.be(states.FULFILLED);
       promise2.resolve(promise);
       wait(function() {
-        wait(function() {
-          expect(onFulfilled.calledWith('here it is')).to.be(true);
-          done();
-        });
+        expect(onFulfilled.calledWith('here it is')).to.be(true);
+        done();
       });
     });
   });
@@ -79,10 +73,8 @@ describe('Performing the promise resolution procedure', function() {
       expect(promise.state).to.be(states.REJECTED);
       promise2.resolve(promise);
       wait(function() {
-        wait(function() {
-          expect(onRejected.calledWith('here it is')).to.be(true);
-          done();
-        });
+        expect(onRejected.calledWith('here it is')).to.be(true);
+        done();
       });
     });
   });
@@ -169,10 +161,8 @@ describe('Performing the promise resolution procedure', function() {
       promise.resolve(thenable);
       promise2.resolve('here i am');
       wait(function() {
-        wait(function() {
-          expect(onFulfilled.calledWith('here i am')).to.be(true);
-          done();
-        });
+        expect(onFulfilled.calledWith('here i am')).to.be(true);
+        done();
       });
     });
 

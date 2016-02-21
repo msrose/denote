@@ -93,10 +93,8 @@ describe('Resolving a promise', function() {
     promise2.then(undefined, onRejected);
     promise.resolve();
     wait(function() {
-      wait(function() {
-        expect(onRejected.calledWith(error)).to.be(true);
-        done();
-      });
+      expect(onRejected.calledWith(error)).to.be(true);
+      done();
     });
   });
 
@@ -105,10 +103,8 @@ describe('Resolving a promise', function() {
     promise2.then(onFulfilled);
     promise.resolve();
     wait(function() {
-      wait(function() {
-        expect(onFulfilled.calledWith('llamas')).to.be(true);
-        done();
-      });
+      expect(onFulfilled.calledWith('llamas')).to.be(true);
+      done();
     });
   });
 
@@ -132,13 +128,9 @@ describe('Resolving a promise', function() {
     promise.resolve(promise2);
     promise2.resolve('hehe');
     wait(function() {
-      wait(function() {
-        expect(onFulfilled.calledOnce).to.be(true);
-        wait(function() {
-          expect(onFulfilled.calledOnce).to.be(true);
-          done();
-        });
-      });
+      expect(onFulfilled.calledOnce).to.be(true);
+      expect(onFulfilled.calledOnce).to.be(true);
+      done();
     });
   });
 

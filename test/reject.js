@@ -105,10 +105,8 @@ describe('when a promise is rejected', function() {
     promise2.then(undefined, onRejected);
     promise.reject();
     wait(function() {
-      wait(function() {
-        expect(onRejected.calledWith(error)).to.be(true);
-        done();
-      });
+      expect(onRejected.calledWith(error)).to.be(true);
+      done();
     });
   });
 
@@ -118,10 +116,8 @@ describe('when a promise is rejected', function() {
     promise2.then(onFulfilled);
     promise.reject();
     wait(function() {
-      wait(function() {
-        expect(onFulfilled.calledWith('hehe')).to.be(true);
-        done();
-      });
+      expect(onFulfilled.calledWith('hehe')).to.be(true);
+      done();
     });
   });
 
