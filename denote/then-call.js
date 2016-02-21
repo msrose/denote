@@ -16,7 +16,7 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
 ThenCall.prototype.fulfill = function(value) {
   if(_.isFunction(this.onFulfilled)) {
     var thenCall = this;
-    setTimeout(function() {
+    process.nextTick(function() {
       try {
         var returnValue = thenCall.onFulfilled.call(undefined, value);
         thenCall.returnPromise.resolve(returnValue);
@@ -32,7 +32,7 @@ ThenCall.prototype.fulfill = function(value) {
 ThenCall.prototype.reject = function(reason) {
   if(_.isFunction(this.onRejected)) {
     var thenCall = this;
-    setTimeout(function() {
+    process.nextTick(function() {
       try {
         var returnValue = thenCall.onRejected.call(undefined, reason);
         thenCall.returnPromise.resolve(returnValue);
