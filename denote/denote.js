@@ -7,6 +7,7 @@
 
 var utils = require('./utils');
 var ThenCall = require('./then-call');
+var coerce = require('./coerce');
 
 var PENDING = utils.states.PENDING,
   FULFILLED = utils.states.FULFILLED,
@@ -15,6 +16,7 @@ var PENDING = utils.states.PENDING,
 /**
  * Creates a new promise object.
  * @constructor
+ * @since 1.0.0
  */
 function Denote() {
   this._thenCalls = [];     // list of ThenCall objects (one for each call to .then)
@@ -28,6 +30,7 @@ function Denote() {
  * Register fulfillment and rejection handlers for a promise.
  * Non-function arguments are ignored.
  * @public
+ * @since 1.0.0
  * @param {function} onFulfilled The fulfillment handler
  * @param {function} onRejected The rejection handler
  * @returns {Denote} A new Denote promise instance
@@ -49,6 +52,7 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
  * Adopts the state of the value if it is a thenable
  * Subsequent calls will be ignored
  * @public
+ * @since 1.0.0
  * @param {any} value the value of the promise
  * @throws {TypeError} If the promise is resolved with itself
  * @returns {undefined}
@@ -61,13 +65,24 @@ Denote.prototype.resolve = function(value) {
     throw new TypeError();
   }
   this._resolving = true;
-  coerce(this, value);
+  var promise = this;
+  var fulfill = function(fulfillValue) {
+    promise._state = FULFILLED;
+    promise._resolving = false;
+    promise._value = fulfillValue;
+    promise._thenCalls.forEach(function(thenCall) {
+      thenCall.fulfill(fulfillValue);
+    });
+  };
+  var reject = this.reject.bind(this);
+  coerce(value, Denote, fulfill, reject);
 };
 
 /**
  * Rejects the promise with the given reason.
  * Subsequent calls will be ignored.
  * @public
+ * @since 1.0.0
  * @param {any} reason The reason why the promise was rejected
  * @returns {undefined}
  */
@@ -83,61 +98,15 @@ Denote.prototype.reject = function(reason) {
 };
 
 /**
- * Implements the promise resolution procedure for Denote promises.
- * The promise adopts the state of its resolve value.
- * @private
- * @param {Denote} promise An instance of a Denote object to coerce
- * @param {any} value The value that the promise is resolved with
- * @returns {undefined}
+ * Registers a rejection handler with the promise.
+ * Equivalent to calling promise.then(undefined, onRejected).
+ * @public
+ * @since 1.1.0
+ * @param {function} onRejected The rejection handler
+ * @returns {Denote} A new instance of a Denote promise
  */
-function coerce(promise, value) {
-  if(value instanceof Denote) {
-    value.then(fulfill.bind(undefined, promise), promise.reject.bind(promise));
-  } else if(utils.isObject(value) || utils.isFunction(value)) {
-    var called = false;
-    try {
-      var then = value.then;
-      if(utils.isFunction(then)) {
-        var resolveFunction = function(resolveValue) {
-          if(!called) {
-            called = true;
-            coerce(promise, resolveValue);
-          }
-        };
-        var rejectFunction = function(rejectValue) {
-          if(!called) {
-            called = true;
-            promise.reject(rejectValue);
-          }
-        };
-        then.call(value, resolveFunction, rejectFunction);
-      } else {
-        fulfill(promise, value);
-      }
-    } catch(e) {
-      if(!called) {
-        promise.reject(e);
-      }
-    }
-  } else {
-    fulfill(promise, value);
-  }
-}
-
-/**
- * Fulfills a Denote promise with its final (non-thenable) value
- * @private
- * @param {Denote} promise The Denote promise instance to fulfill
- * @param {any} value The final value of the resolved promise
- * @returns {undefined}
- */
-function fulfill(promise, value) {
-  promise._state = FULFILLED;
-  promise._resolving = false;
-  promise._value = value;
-  promise._thenCalls.forEach(function(thenCall) {
-    thenCall.fulfill(value);
-  });
-}
+Denote.prototype.catch = function(onRejected) {
+  return this.then(undefined, onRejected);
+};
 
 module.exports = Denote;

@@ -83,6 +83,20 @@ with the first argument as the reason for the failure
 
 A new instance of a `Denote` promise object
 
+### Denote.prototype.catch(onRejected)
+
+Registers a rejection handler on the promise that will be called if the
+promise is rejected. Equivalent to `promise.then(undefined, onRejected)`.
+
+#### Parameters
+
+`onRejected`: a `function` that will be called if the operation fails,
+with the first argument as the reason for the failure
+
+#### Return Value
+
+A new instance of a `Denote` promise object
+
 ### Denote.prototype.resolve(value)
 
 To be called when the asynchronous operation succeeds.
