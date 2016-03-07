@@ -51,6 +51,7 @@ Denote.prototype.then = function(onFulfilled, onRejected) {
  * @public
  * @param {any} value the value of the promise
  * @throws {TypeError} If the promise is resolved with itself
+ * @returns {undefined}
  */
 Denote.prototype.resolve = function(value) {
   if(this._state !== PENDING || this._resolving) {
@@ -67,7 +68,8 @@ Denote.prototype.resolve = function(value) {
  * Rejects the promise with the given reason.
  * Subsequent calls will be ignored.
  * @public
- * @param {} reason The reason why the promise was rejected
+ * @param {any} reason The reason why the promise was rejected
+ * @returns {undefined}
  */
 Denote.prototype.reject = function(reason) {
   if(this._state !== PENDING) {
@@ -85,7 +87,8 @@ Denote.prototype.reject = function(reason) {
  * The promise adopts the state of its resolve value.
  * @private
  * @param {Denote} promise An instance of a Denote object to coerce
- * @param {} value The value that the promise is resolved with
+ * @param {any} value The value that the promise is resolved with
+ * @returns {undefined}
  */
 function coerce(promise, value) {
   if(value instanceof Denote) {
@@ -125,7 +128,8 @@ function coerce(promise, value) {
  * Fulfills a Denote promise with its final (non-thenable) value
  * @private
  * @param {Denote} promise The Denote promise instance to fulfill
- * @param {} value The final value of the resolved promise
+ * @param {any} value The final value of the resolved promise
+ * @returns {undefined}
  */
 function fulfill(promise, value) {
   promise._state = FULFILLED;
