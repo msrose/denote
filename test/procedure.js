@@ -173,7 +173,7 @@ describe('Performing the promise resolution procedure', function() {
       };
       var spy = sinon.spy(promise, 'resolve');
       promise.resolve(thenable);
-      expect(spy.calledTwice).to.be(true);
+      expect(spy.calledOnce).to.be(true);
     });
 
     it('ignores a second call to rejectPromise when using a custom thenable', function() {

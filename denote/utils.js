@@ -1,6 +1,6 @@
 /**
- * Author: Michael Rose
- * License: https://github.com/msrose/denote/blob/master/LICENSE
+ * @author Michael Rose
+ * @license https://github.com/msrose/denote/blob/master/LICENSE
  */
 
 'use strict';
