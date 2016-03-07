@@ -1,11 +1,11 @@
 /**
  * Author: Michael Rose
- * License: MIT
+ * License: https://github.com/msrose/denote/blob/master/LICENSE
  */
 
 'use strict';
 
-var _ = require('./utils');
+var utils = require('./utils');
 
 function ThenCall(onFulfilled, onRejected, returnPromise) {
   this.onFulfilled = onFulfilled;
@@ -14,7 +14,7 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
 }
 
 ThenCall.prototype.fulfill = function(value) {
-  if(_.isFunction(this.onFulfilled)) {
+  if(utils.isFunction(this.onFulfilled)) {
     var thenCall = this;
     process.nextTick(function() {
       try {
@@ -30,7 +30,7 @@ ThenCall.prototype.fulfill = function(value) {
 };
 
 ThenCall.prototype.reject = function(reason) {
-  if(_.isFunction(this.onRejected)) {
+  if(utils.isFunction(this.onRejected)) {
     var thenCall = this;
     process.nextTick(function() {
       try {

@@ -18,7 +18,7 @@ describe('Denote', function() {
   });
 
   it('starts out in pending state', function() {
-    expect(promise.state).to.be(states.PENDING);
+    expect(promise._state).to.be(states.PENDING);
   });
 
   describe('the then method', function() {

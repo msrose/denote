@@ -116,6 +116,7 @@ npm install
 ```
 
 To run the project's own test suite: `npm test`
+
 To run the [Promises/A+ compliance tests](https://github.com/promises-aplus/promises-tests): `npm run test:aplus`
 
 Before submitting a pull request, make sure that:
@@ -138,3 +139,7 @@ git merge develop
 git push origin --tags master
 npm publish
 ```
+
+## License
+
+[MIT](https://github.com/msrose/denote/blob/master/LICENSE)

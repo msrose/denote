@@ -1,57 +1,66 @@
 /**
  * Author: Michael Rose
- * License: MIT
+ * License: https://github.com/msrose/denote/blob/master/LICENSE
  */
 
 'use strict';
 
-var _ = require('./utils');
+var utils = require('./utils');
 var ThenCall = require('./then-call');
 
-var PENDING = _.states.PENDING,
-  FULFILLED = _.states.FULFILLED,
-  REJECTED = _.states.REJECTED;
+var PENDING = utils.states.PENDING,
+  FULFILLED = utils.states.FULFILLED,
+  REJECTED = utils.states.REJECTED;
 
 function Denote() {
-  this.thenCalls = [];
-  this.state = PENDING;
-  this.resolving = false;
-  this.value = undefined;
-  this.reason = undefined;
+  this._thenCalls = [];
+  this._state = PENDING;
+  this._resolving = false;
+  this._value = undefined;
+  this._reason = undefined;
 }
 
 Denote.prototype.then = function(onFulfilled, onRejected) {
   var thenCall = new ThenCall(onFulfilled, onRejected, new Denote());
-  if(this.state === FULFILLED) {
-    thenCall.fulfill(this.value);
-  } else if(this.state === REJECTED) {
-    thenCall.reject(this.reason);
+  if(this._state === FULFILLED) {
+    thenCall.fulfill(this._value);
+  } else if(this._state === REJECTED) {
+    thenCall.reject(this._reason);
   } else {
-    this.thenCalls.push(thenCall);
+    this._thenCalls.push(thenCall);
   }
   return thenCall.returnPromise;
 };
 
+function fulfill(promise, fulfillValue) {
+  promise._state = FULFILLED;
+  promise._resolving = false;
+  promise._value = fulfillValue;
+  promise._thenCalls.forEach(function(thenCall) {
+    thenCall.fulfill(fulfillValue);
+  });
+}
+
 Denote.prototype.resolve = function(value) {
-  var self = this;
-  if(self.state !== PENDING || self.resolving) {
+  if(this._state !== PENDING || this._resolving) {
     return;
   }
-  if(value === self) {
+  if(value === this) {
     throw new TypeError();
   }
-  self.resolving = true;
+  this._resolving = true;
   if(value instanceof Denote) {
-    value.then(fulfill, self.reject.bind(self));
-  } else if(_.isObject(value) || _.isFunction(value)) {
+    value.then(fulfill.bind(undefined, this), this.reject.bind(this));
+  } else if(utils.isObject(value) || utils.isFunction(value)) {
     var called = false;
     try {
       var then = value.then;
-      if(_.isFunction(then)) {
+      if(utils.isFunction(then)) {
+        var self = this;
         var resolveFunction = function(resolveValue) {
           if(!called) {
             called = true;
-            self.resolving = false;
+            self._resolving = false;
             self.resolve(resolveValue);
           }
         };
@@ -63,33 +72,25 @@ Denote.prototype.resolve = function(value) {
         };
         then.call(value, resolveFunction, rejectFunction);
       } else {
-        fulfill(value);
+        fulfill(this, value);
       }
     } catch(e) {
       if(!called) {
-        self.reject(e);
+        this.reject(e);
       }
     }
   } else {
-    fulfill(value);
-  }
-  function fulfill(fulfillValue) {
-    self.state = FULFILLED;
-    self.resolving = false;
-    self.value = fulfillValue;
-    self.thenCalls.forEach(function(thenCall) {
-      thenCall.fulfill(fulfillValue);
-    });
+    fulfill(this, value);
   }
 };
 
 Denote.prototype.reject = function(reason) {
-  if(this.state !== PENDING) {
+  if(this._state !== PENDING) {
     return;
   }
-  this.state = REJECTED;
-  this.reason = reason;
-  this.thenCalls.forEach(function(thenCall) {
+  this._state = REJECTED;
+  this._reason = reason;
+  this._thenCalls.forEach(function(thenCall) {
     thenCall.reject(reason);
   });
 };

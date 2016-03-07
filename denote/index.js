@@ -1,6 +1,6 @@
 /**
  * Author: Michael Rose
- * License: MIT
+ * License: https://github.com/msrose/denote/blob/master/LICENSE
  */
 
 'use strict';

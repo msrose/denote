@@ -28,7 +28,7 @@ describe('when a promise is rejected', function() {
 
   it('transitions to the rejected state', function() {
     promise.reject();
-    expect(promise.state).to.be(states.REJECTED);
+    expect(promise._state).to.be(states.REJECTED);
   });
 
   it('only calls the onRejected handler once', function(done) {

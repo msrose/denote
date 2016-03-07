@@ -28,7 +28,7 @@ describe('Resolving a promise', function() {
 
   it('transitions to the fulfilled state', function() {
     promise.resolve();
-    expect(promise.state).to.be(states.FULFILLED);
+    expect(promise._state).to.be(states.FULFILLED);
   });
 
   it('calls onFulfilled with with the promise value', function(done) {
