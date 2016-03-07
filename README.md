@@ -45,81 +45,7 @@ verifyParity(14).then(function(value) {
 
 ## API
 
-Create a new promise object:
-
-### require('denote')
-
-A function that creates a new instance of a Denote promise.
-For example:
-
-```
-var denote = require('denote');
-var promise = denote();
-```
-
-#### Parameters
-
-None
-
-#### Return Value
-
-A function that when called returns a new instance of a `Denote` object,
-which is a promise representing the future result of an asynchronous operation.
-
-### Denote.prototype.then(onFulfilled, onRejected)
-
-Registers two callbacks to the asynchronous operation that will be conditionally
-executed based upon its result.
-
-#### Parameters
-
-`onFulfilled`: a `function` that will be called if the operation succeeds,
-with the first argument as the result of the operation
-
-`onRejected`: a `function` that will be called if the operation fails,
-with the first argument as the reason for the failure
-
-#### Return Value
-
-A new instance of a `Denote` promise object
-
-### Denote.prototype.catch(onRejected)
-
-Registers a rejection handler on the promise that will be called if the
-promise is rejected. Equivalent to `promise.then(undefined, onRejected)`.
-
-#### Parameters
-
-`onRejected`: a `function` that will be called if the operation fails,
-with the first argument as the reason for the failure
-
-#### Return Value
-
-A new instance of a `Denote` promise object
-
-### Denote.prototype.resolve(value)
-
-To be called when the asynchronous operation succeeds.
-
-#### Parameters
-
-`value`: the result of the asynchronous operation success
-
-#### Return Value
-
-`undefined`
-
-### Denote.prototype.reject(reason)
-
-To be called when the asynchronous operation fails.
-
-#### Parameters
-
-`reason`: the reason for the failure of the asynchronous operation
-
-#### Return Value
-
-`undefined`
+View the [online documentation](//msrose.github.io/denote).
 
 ## Contributing
 
@@ -145,9 +71,16 @@ npm run lint && npm run test:all
 ## Making a Release
 
 ```
+npm run lint
+npm run test:all
 git checkout develop
 npm version major|minor|patch
 git push origin develop
+git checkout gh-pages
+jsdoc --readme README.md --package package.json --destination docs denote
+git add docs
+git commit -m "Update docs"
+git push origin gh-pages
 git checkout master
 git merge develop
 git push origin --tags master
