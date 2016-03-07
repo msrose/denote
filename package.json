@@ -1,6 +1,6 @@
 {
   "name": "denote",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Minimalistic Promises/A+ compliant JavaScript promise implementation",
   "main": "denote/index.js",
   "scripts": {
