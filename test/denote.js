@@ -2,7 +2,7 @@
 
 var expect = require('expect.js');
 
-var states = require('../denote/utils').states;
+var states = require('../denote/denote').states;
 var denote = require('../denote');
 var Denote = require('../denote/denote');
 

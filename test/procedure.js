@@ -4,7 +4,7 @@ var sinon = require('sinon');
 var expect = require('expect.js');
 var wait = require('./wait');
 
-var states = require('../denote/utils').states;
+var states = require('../denote/denote').states;
 var denote = require('../denote');
 
 describe('Performing the promise resolution procedure', function() {

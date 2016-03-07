@@ -1,17 +1,17 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
+ * @module Denote
  */
 
 'use strict';
 
-var utils = require('./utils');
 var ThenCall = require('./then-call');
 var coerce = require('./coerce');
 
-var PENDING = utils.states.PENDING,
-  FULFILLED = utils.states.FULFILLED,
-  REJECTED = utils.states.REJECTED;
+var PENDING = 'pending',
+  FULFILLED = 'fulfilled',
+  REJECTED = 'rejected';
 
 /**
  * Creates a new promise object.
@@ -109,4 +109,22 @@ Denote.prototype.catch = function(onRejected) {
   return this.then(undefined, onRejected);
 };
 
+/**
+ * The three states of a promise
+ * @private
+ * @readonly
+ * @enum {string}
+ */
+Denote.states = {
+  /** The promise is has not been resolved or rejected (default state) */
+  PENDING: PENDING,
+  /** The promise is has been resolved */
+  FULFILLED: FULFILLED,
+  /** The promise is has not been rejected */
+  REJECTED: REJECTED
+};
+
+/**
+ * The Denote constructor
+ */
 module.exports = Denote;
