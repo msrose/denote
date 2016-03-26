@@ -7,15 +7,30 @@
 'use strict';
 
 var Denote = require('./denote');
+var utils = require('./utils');
+
+/**
+ * @callback executor
+ * @param {function} resolve A function that when called with a value,
+ * will fulfill the promise with that value
+ * @param {function} reject A function that when called with a reason,
+ * will reject the promise with that reason
+ */
 
 /**
  * A factory function creating a new Denote promise instance.
  * @public
- * @since 1.0.0
+ * @since 1.2.0
+ * @param {executor} [executor] An optional executor function that
+ * will be called immediately.
  * @returns {Denote} A new Denote promise instance
  */
-function denote() {
-  return new Denote();
+function denote(executor) {
+  var promise = new Denote();
+  if(utils.isFunction(executor)) {
+    executor(promise.resolve.bind(promise), promise.reject.bind(promise));
+  }
+  return promise;
 }
 
 /**

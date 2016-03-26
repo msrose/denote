@@ -1,6 +1,7 @@
 'use strict';
 
 var expect = require('expect.js');
+var sinon = require('sinon');
 var wait = require('./wait');
 
 var states = require('../denote/denote').states;
@@ -45,6 +46,40 @@ describe('Denote', function() {
       expect(promise._state).to.be(states.REJECTED);
       promise.catch(function(reason) {
         expect(reason).to.be('a best reason');
+        done();
+      });
+    });
+  });
+
+  it('immediately calls a function argument to the factory', function() {
+    var spy = sinon.spy();
+    promise = denote(spy);
+    expect(spy.calledOnce).to.be(true);
+  });
+
+  it('provides a function that fulfills the promise as the first argument to the executor', function(done) {
+    promise = denote(function(resolve) {
+      expect(resolve).to.be.a(Function);
+      resolve('hehe');
+    });
+    wait(function() {
+      expect(promise._state).to.be(states.FULFILLED);
+      promise.then(function(value) {
+        expect(value).to.be('hehe');
+        done();
+      });
+    });
+  });
+
+  it('provides a function that rejects the promise as the second argument to the executor', function(done) {
+    promise = denote(function(resolve, reject) {
+      expect(reject).to.be.a(Function);
+      reject('eheh');
+    });
+    wait(function() {
+      expect(promise._state).to.be(states.REJECTED);
+      promise.catch(function(reason) {
+        expect(reason).to.be('eheh');
         done();
       });
     });
