@@ -116,11 +116,11 @@ Denote.prototype.catch = function(onRejected) {
  * @enum {string}
  */
 Denote.states = {
-  /** The promise is has not been resolved or rejected (default state) */
+  /** The promise has not yet been resolved or rejected (default state) */
   PENDING: PENDING,
-  /** The promise is has been resolved */
+  /** The promise has been resolved */
   FULFILLED: FULFILLED,
-  /** The promise is has not been rejected */
+  /** The promise has been rejected */
   REJECTED: REJECTED
 };
 

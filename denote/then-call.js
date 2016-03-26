@@ -22,6 +22,21 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
   this.returnPromise = returnPromise;
 }
 
+function handle(returnPromise, handler, arg, noHandlerAction) {
+  if(utils.isFunction(handler)) {
+    process.nextTick(function() {
+      try {
+        var returnValue = handler(arg);
+        returnPromise.resolve(returnValue);
+      } catch(e) {
+        returnPromise.reject(e);
+      }
+    });
+  } else {
+    noHandlerAction(arg);
+  }
+}
+
 /**
  * Calls the fulfillment handler (if it is a function) with the given value
  * as the first argument, and resolves or rejects the return promise appropriately
@@ -29,19 +44,8 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
  * @returns {undefined}
  */
 ThenCall.prototype.fulfill = function(value) {
-  if(utils.isFunction(this.onFulfilled)) {
-    var thenCall = this;
-    process.nextTick(function() {
-      try {
-        var returnValue = thenCall.onFulfilled.call(undefined, value);
-        thenCall.returnPromise.resolve(returnValue);
-      } catch(e) {
-        thenCall.returnPromise.reject(e);
-      }
-    });
-  } else {
-    this.returnPromise.resolve(value);
-  }
+  var noHandlerAction = this.returnPromise.resolve.bind(this.returnPromise);
+  handle(this.returnPromise, this.onFulfilled, value, noHandlerAction);
 };
 
 /**
@@ -51,19 +55,8 @@ ThenCall.prototype.fulfill = function(value) {
  * @returns {undefined}
  */
 ThenCall.prototype.reject = function(reason) {
-  if(utils.isFunction(this.onRejected)) {
-    var thenCall = this;
-    process.nextTick(function() {
-      try {
-        var returnValue = thenCall.onRejected.call(undefined, reason);
-        thenCall.returnPromise.resolve(returnValue);
-      } catch(e) {
-        thenCall.returnPromise.reject(e);
-      }
-    });
-  } else {
-    this.returnPromise.reject(reason);
-  }
+  var noHandlerAction = this.returnPromise.reject.bind(this.returnPromise);
+  handle(this.returnPromise, this.onRejected, reason, noHandlerAction);
 };
 
 /**
