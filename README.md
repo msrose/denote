@@ -1,3 +1,8 @@
+<a href="http://promises-aplus.github.com/promises-spec">
+    <img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png"
+         align="right" alt="Promises/A+ logo" />
+</a>
+
 # Denote
 
 [![npm version](https://badge.fury.io/js/denote.svg)](https://badge.fury.io/js/denote)
@@ -5,7 +10,7 @@
 
 A JavaScript promise library - because we don't have enough of those already.
 
-- Micro API - only what you need
+- Provides the [ES2015 Promise API](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 - No external dependencies
 - Meets the [Promises/A+ specification](https://promisesaplus.com/)
 
