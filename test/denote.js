@@ -35,8 +35,7 @@ describe('Denote', function() {
       expect(promise._state).to.be(states.FULFILLED);
       promise.then(function(value) {
         expect(value).to.be('llama boy');
-        done();
-      });
+      }).then(done, done);
     });
   });
 
@@ -46,8 +45,7 @@ describe('Denote', function() {
       expect(promise._state).to.be(states.REJECTED);
       promise.catch(function(reason) {
         expect(reason).to.be('a best reason');
-        done();
-      });
+      }).then(done, done);
     });
   });
 
@@ -66,8 +64,7 @@ describe('Denote', function() {
       expect(promise._state).to.be(states.FULFILLED);
       promise.then(function(value) {
         expect(value).to.be('hehe');
-        done();
-      });
+      }).then(done, done);
     });
   });
 
@@ -80,8 +77,42 @@ describe('Denote', function() {
       expect(promise._state).to.be(states.REJECTED);
       promise.catch(function(reason) {
         expect(reason).to.be('eheh');
-        done();
-      });
+      }).then(done, done);
+    });
+  });
+
+  describe('the .all method', function() {
+    it('returns a promise', function() {
+      promise = denote.all();
+      expect(promise).to.be.a(Denote);
+    });
+
+    it('resolves the promises passed in an array', function(done) {
+      promise = denote.all([denote.resolve('hi'), denote.resolve('bobo')]);
+      promise.then(function(value) {
+        expect(value).to.be.an(Array);
+        expect(value[0]).to.be('hi');
+        expect(value[1]).to.be('bobo');
+      }).then(done, done);
+    });
+
+    it('rejects the promise returned if any of the given promises rejects', function(done) {
+      promise = denote.all([denote.resolve('hehe'), denote.reject('hi bruh')]);
+      promise.catch(function(reason) {
+        expect(reason).to.be('hi bruh');
+      }).then(done, done);
+    });
+
+    it('passes any non promise values along', function(done) {
+      denote.all(['this', 'is', 'a', 'value']).then(function(value) {
+        expect(value).to.eql(['this', 'is', 'a', 'value']);
+      }).then(done, done);
+    });
+
+    it('keeps the values in the correct order', function(done) {
+      denote.all(['this', 'should', denote.resolve('keep'), 'order']).then(function(value) {
+        expect(value).to.eql(['this', 'should', 'keep', 'order']);
+      }).then(done, done);
     });
   });
 });
