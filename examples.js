@@ -1,3 +1,5 @@
+var denote = require('./denote');
+
 // deferred pattern
 
 function verifyEven(n) {

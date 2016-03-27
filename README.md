@@ -8,10 +8,12 @@
 [![npm version](https://badge.fury.io/js/denote.svg)](https://badge.fury.io/js/denote)
 [![devDependency Status](https://david-dm.org/msrose/denote/dev-status.svg)](https://david-dm.org/msrose/denote#info=devDependencies)
 
+[API Documentation](http://msrose.github.io/denote)
+
 A JavaScript promise library - because we don't have enough of those already.
 
-- Provides an API equivalent to the [ES2015 Promise specification](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 - No external dependencies
+- Provides equivalent API methods to the [ES2015 Promise specification](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 - Meets the [Promises/A+ specification](https://promisesaplus.com/)
 
 ## Installation
@@ -104,7 +106,7 @@ denote.race(morePromises).then(function(winner) {
 
 ## API
 
-View the [online documentation](//msrose.github.io/denote) for details.
+View the [online documentation](http://msrose.github.io/denote) for details.
 
 ### `denote = require('denote')`
 
@@ -151,6 +153,7 @@ git checkout develop
 npm version major|minor|patch
 git push origin develop
 git checkout gh-pages
+git merge develop
 jsdoc -c jsdoc.conf.json -R README.md -P package.json
 git add docs
 git commit -m "Update docs"
