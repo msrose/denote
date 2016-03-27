@@ -3,5 +3,12 @@
     "systemName": "Denote",
     "copyright": "Copyright © 2016 Michael Rose",
     "theme": "spacelab"
+  },
+  "source": {
+    "include": ["denote"]
+  },
+  "opts": {
+    "template": "./node_modules/ink-docstrap/template",
+    "destination": "./docs"
   }
 }
