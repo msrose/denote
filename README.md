@@ -18,14 +18,14 @@ A JavaScript promise library - because we don't have enough of those already.
 
 ## Installation
 
-```
+```shell
 npm install denote
 ```
 
 ## Example Usage
 
 ```javascript
-var denote = require('./denote');
+var denote = require('denote');
 
 ```
 
@@ -118,10 +118,10 @@ View the [online documentation](http://msrose.github.io/denote) for details.
 
 ### `Denote.prototype`
 
-- `Denote.prototype.then`
-- `Denote.prototype.catch`
-- `Denote.prototype.resolve`
-- `Denote.prototype.reject`
+- `Denote.prototype.then(onFulfilled, onRejected)`
+- `Denote.prototype.catch(onRejected)`
+- `Denote.prototype.resolve(value)`
+- `Denote.prototype.reject(reason)`
 
 ## Contributing
 
