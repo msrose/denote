@@ -115,4 +115,46 @@ describe('Denote', function() {
       }).then(done, done);
     });
   });
+
+  describe('the .race method', function() {
+    it('returns a promise', function() {
+      expect(denote.race()).to.be.a(Denote);
+    });
+
+    it('is fulfills the returned promise with the first value available', function(done) {
+      denote.race([denote.resolve('hi'), 'bye']).then(function(value) {
+        expect(value).to.be('bye');
+      }).then(done, done);
+    });
+
+    it('rejects the returned promise if the first one done is rejected', function(done) {
+      denote.race([denote.reject('llamas'), denote.resolve('hehe')]).catch(function(reason) {
+        expect(reason).to.be('llamas');
+      }).then(done, done);
+    });
+
+    it('does not call resolve on the returned promise a second time', function(done) {
+      promise = denote.race(['hi', 'bye']);
+      var spy = sinon.spy(promise, 'resolve');
+      promise.then(function(value) {
+        expect(value).to.be('hi');
+        wait(function() {
+          expect(spy.callCount).to.be(1);
+          done();
+        });
+      }).catch(done);
+    });
+
+    it('does not call reject on the returned promise a second time', function(done) {
+      promise = denote.race([denote.reject('hi'), denote.reject('bye')]);
+      var spy = sinon.spy(promise, 'reject');
+      promise.catch(function(reason) {
+        expect(reason).to.be('hi');
+        wait(function() {
+          expect(spy.callCount).to.be(1);
+          done();
+        });
+      }).catch(done);
+    });
+  });
 });

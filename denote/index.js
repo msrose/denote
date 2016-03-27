@@ -100,4 +100,37 @@ denote.all = function(list) {
   return returnPromise;
 };
 
+/**
+ * Returns a promise that gets fulfilled or rejected with the
+ * value/reason of the first promise to be fulfilled or rejected
+ * from the list of given promises.
+ * @public
+ * @since 1.2.0
+ * @param {array} list A list of values, which may include promises.
+ * Any promises in the list will be resolved.
+ * @returns {Denote} A new Denote promise instance
+ */
+denote.race = function(list) {
+  var promise = denote();
+  if(Array.isArray(list) && list.length > 0) {
+    var done = false;
+    list.forEach(function(item) {
+      denote.resolve(item).then(function(value) {
+        if(!done) {
+          done = true;
+          promise.resolve(value);
+        }
+      }, function(reason) {
+        if(!done) {
+          done = true;
+          promise.reject(reason);
+        }
+      });
+    });
+  } else {
+    promise.resolve();
+  }
+  return promise;
+};
+
 module.exports = denote;
