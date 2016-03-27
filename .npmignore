@@ -3,3 +3,4 @@ test/
 .gitignore
 .nvmrc
 .npmignore
+jsdoc.conf.json

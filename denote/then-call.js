@@ -1,7 +1,6 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
- * @module ThenCall
  */
 
 'use strict';
@@ -11,7 +10,7 @@ var utils = require('./utils');
 /**
  * Represents a call to Denote#then
  * @constructor
- * @public
+ * @private
  * @param {function} onFulfilled The fulfillment handler for the call to Denote#then
  * @param {function} onRejected The rejection handler for the call to Denote#then
  * @param {Denote} returnPromise The Denote promise instance returned by Denote#then
@@ -22,6 +21,21 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
   this.returnPromise = returnPromise;
 }
 
+function handle(returnPromise, handler, arg, noHandlerAction) {
+  if(utils.isFunction(handler)) {
+    process.nextTick(function() {
+      try {
+        var returnValue = handler(arg);
+        returnPromise.resolve(returnValue);
+      } catch(e) {
+        returnPromise.reject(e);
+      }
+    });
+  } else {
+    noHandlerAction(arg);
+  }
+}
+
 /**
  * Calls the fulfillment handler (if it is a function) with the given value
  * as the first argument, and resolves or rejects the return promise appropriately
@@ -29,19 +43,8 @@ function ThenCall(onFulfilled, onRejected, returnPromise) {
  * @returns {undefined}
  */
 ThenCall.prototype.fulfill = function(value) {
-  if(utils.isFunction(this.onFulfilled)) {
-    var thenCall = this;
-    process.nextTick(function() {
-      try {
-        var returnValue = thenCall.onFulfilled.call(undefined, value);
-        thenCall.returnPromise.resolve(returnValue);
-      } catch(e) {
-        thenCall.returnPromise.reject(e);
-      }
-    });
-  } else {
-    this.returnPromise.resolve(value);
-  }
+  var noHandlerAction = this.returnPromise.resolve.bind(this.returnPromise);
+  handle(this.returnPromise, this.onFulfilled, value, noHandlerAction);
 };
 
 /**
@@ -51,22 +54,8 @@ ThenCall.prototype.fulfill = function(value) {
  * @returns {undefined}
  */
 ThenCall.prototype.reject = function(reason) {
-  if(utils.isFunction(this.onRejected)) {
-    var thenCall = this;
-    process.nextTick(function() {
-      try {
-        var returnValue = thenCall.onRejected.call(undefined, reason);
-        thenCall.returnPromise.resolve(returnValue);
-      } catch(e) {
-        thenCall.returnPromise.reject(e);
-      }
-    });
-  } else {
-    this.returnPromise.reject(reason);
-  }
+  var noHandlerAction = this.returnPromise.reject.bind(this.returnPromise);
+  handle(this.returnPromise, this.onRejected, reason, noHandlerAction);
 };
 
-/**
- * The ThenCall constructor
- */
 module.exports = ThenCall;

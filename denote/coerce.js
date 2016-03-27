@@ -1,7 +1,6 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
- * @module coerce
  */
 
 'use strict';
@@ -11,7 +10,7 @@ var utils = require('./utils');
 /**
  * Implements the promise resolution procedure for the given type.
  * The promise adopts the state of its resolve value.
- * @public
+ * @private
  * @param {any} value The value that the promise is resolved with
  * @param {function} Type The constructor function of the promise type
  * to coerce. Just pass noop (i.e. function() {}) if you don't have a
