@@ -1,7 +1,6 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
- * @module ThenCall
  */
 
 'use strict';
@@ -11,7 +10,7 @@ var utils = require('./utils');
 /**
  * Represents a call to Denote#then
  * @constructor
- * @public
+ * @private
  * @param {function} onFulfilled The fulfillment handler for the call to Denote#then
  * @param {function} onRejected The rejection handler for the call to Denote#then
  * @param {Denote} returnPromise The Denote promise instance returned by Denote#then
@@ -59,7 +58,4 @@ ThenCall.prototype.reject = function(reason) {
   handle(this.returnPromise, this.onRejected, reason, noHandlerAction);
 };
 
-/**
- * The ThenCall constructor
- */
 module.exports = ThenCall;

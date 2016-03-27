@@ -10,7 +10,7 @@
 
 A JavaScript promise library - because we don't have enough of those already.
 
-- Provides the [ES2015 Promise API](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- Provides an API equivalent to the [ES2015 Promise specification](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 - No external dependencies
 - Meets the [Promises/A+ specification](https://promisesaplus.com/)
 
@@ -22,7 +22,7 @@ npm install denote
 
 ## Example Usage
 
-```js
+```javascript
 var denote = require('denote');
 
 function verifyParity(n) {
@@ -54,7 +54,7 @@ View the [online documentation](//msrose.github.io/denote).
 
 ## Contributing
 
-```
+```shell
 git clone https://github.com/msrose/denote.git
 cd denote
 npm install
@@ -69,13 +69,13 @@ Before submitting a pull request, make sure that:
 - the code conforms to the eslint configuration for this project,
 - and that all the tests pass
 
-```
+```shell
 npm run lint && npm run test:all
 ```
 
 ## Making a Release
 
-```
+```shell
 npm run lint
 npm run test:all
 git checkout develop

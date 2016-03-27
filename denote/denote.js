@@ -1,7 +1,6 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
- * @module Denote
  */
 
 'use strict';
@@ -124,7 +123,4 @@ Denote.states = {
   REJECTED: REJECTED
 };
 
-/**
- * The Denote constructor
- */
 module.exports = Denote;

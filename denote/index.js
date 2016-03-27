@@ -1,6 +1,14 @@
 /**
  * @author Michael Rose
  * @license https://github.com/msrose/denote/blob/master/LICENSE
+ */
+
+/**
+ * Exposes the essential promise API. It can be used as a factory function
+ * to create promises, which can also be passed an executor which gets called with resolve and
+ * reject functions as arguments. Use the static methods to create immediately fulfilled or
+ * rejected promises, or work with groups of promises.
+ * See the {@link Denote} class for documentation of the promise instance methods.
  * @module denote
  */
 
@@ -17,21 +25,24 @@ var utils = require('./utils');
  * will reject the promise with that reason
  */
 
+var denote =
 /**
- * A factory function creating a new Denote promise instance.
+ * A factory function that can be used to create new Denote promise instances.
+ * If passed an executor function, it will be called immediately with arguments
+ * to resolve or reject the returned promise.
  * @public
  * @since 1.2.0
- * @param {executor} [executor] An optional executor function that
- * will be called immediately.
+ * @param {module:denote~executor} [executor] A function that will be called immediately
+ * with the returned promises resolve and reject instance methods as arguments
  * @returns {Denote} A new Denote promise instance
  */
-function denote(executor) {
+module.exports = function(executor) {
   var promise = new Denote();
   if(utils.isFunction(executor)) {
     executor(promise.resolve.bind(promise), promise.reject.bind(promise));
   }
   return promise;
-}
+};
 
 /**
  * Creates an immediately fulfilled promise, with the given
@@ -42,7 +53,7 @@ function denote(executor) {
  * @returns {Denote} A new Denote promise instance that is
  * fulfilled with the given value
  */
-denote.resolve = function(value) {
+module.exports.resolve = function(value) {
   var promise = denote();
   promise.resolve(value);
   return promise;
@@ -57,7 +68,7 @@ denote.resolve = function(value) {
  * @returns {Denote} A new Denote promise instance that is
  * rejected with the given reason
  */
-denote.reject = function(reason) {
+module.exports.reject = function(reason) {
   var promise = denote();
   promise.reject(reason);
   return promise;
@@ -74,7 +85,7 @@ denote.reject = function(reason) {
  * Any promises in the list will be resolved.
  * @returns {Denote} A new Denote promise instance
  */
-denote.all = function(list) {
+module.exports.all = function(list) {
   var returnPromise = denote();
   if(Array.isArray(list) && list.length > 0) {
     var values = new Array(list.length);
@@ -110,7 +121,7 @@ denote.all = function(list) {
  * Any promises in the list will be resolved.
  * @returns {Denote} A new Denote promise instance
  */
-denote.race = function(list) {
+module.exports.race = function(list) {
   var promise = denote();
   if(Array.isArray(list) && list.length > 0) {
     var done = false;
@@ -132,5 +143,3 @@ denote.race = function(list) {
   }
   return promise;
 };
-
-module.exports = denote;
