@@ -131,7 +131,7 @@ cd denote
 npm install
 ```
 
-To run the project's own test suite: `npm test`
+To run the project's own test suite: `npm run test:mocha`
 
 To run the [Promises/A+ compliance tests](https://github.com/promises-aplus/promises-tests): `npm run test:aplus`
 
@@ -141,14 +141,14 @@ Before submitting a pull request, make sure that:
 - and that all the tests pass
 
 ```shell
-npm run lint && npm run test:all
+npm run lint && npm test
 ```
 
 ## Making a Release
 
 ```shell
 npm run lint
-npm run test:all
+npm test
 git checkout develop
 npm version major|minor|patch
 git push origin develop

@@ -4,10 +4,10 @@
   "description": "Minimalistic Promises/A+ compliant JavaScript promise implementation",
   "main": "denote/index.js",
   "scripts": {
-    "test": "mocha test",
-    "lint": "eslint denote/**/*.js test/**/*.js",
+    "test": "npm run test:mocha && npm run test:aplus",
+    "test:mocha": "mocha test",
     "test:aplus": "promises-aplus-tests test/adapter.js",
-    "test:all": "npm test && npm run test:aplus"
+    "lint": "eslint denote/**/*.js test/**/*.js"
   },
   "repository": {
     "type": "git",
